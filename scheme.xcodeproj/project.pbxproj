@@ -30,7 +30,7 @@
 		30CEC378209D99E000134E64 /* scheme_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40420759EC10076C085 /* scheme_type.c */; };
 		30CEC379209D99E000134E64 /* scheme_vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40A20759EC20076C085 /* scheme_vector.c */; };
 		30CEC37A209D99E000134E64 /* scheme_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 30CEE4942079D2070076C085 /* scheme_internal.h */; };
-		30CEC37B209D9A1B00134E64 /* liblibscheme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30CEC360209D99C700134E64 /* liblibscheme.a */; };
+		30CEC37C209D9C1F00134E64 /* libscheme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30CEC360209D99C700134E64 /* libscheme.a */; };
 		30CEE41D20759EC40076C085 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40820759EC20076C085 /* main.c */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 
 /* Begin PBXFileReference section */
 		08061B2FAC0E546C7C76353A /* Pods-SchemeREPLViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SchemeREPLViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SchemeREPLViewTests/Pods-SchemeREPLViewTests.debug.xcconfig"; sourceTree = "<group>"; };
-		30CEC360209D99C700134E64 /* liblibscheme.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibscheme.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		30CEC360209D99C700134E64 /* libscheme.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libscheme.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		30CEE3F720759E5F0076C085 /* scheme */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = scheme; sourceTree = BUILT_PRODUCTS_DIR; };
 		30CEE40120759EC10076C085 /* scheme_fun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_fun.c; path = "libscheme-0.5/scheme_fun.c"; sourceTree = "<group>"; };
 		30CEE40220759EC10076C085 /* scheme_list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_list.c; path = "libscheme-0.5/scheme_list.c"; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30CEC37B209D9A1B00134E64 /* liblibscheme.a in Frameworks */,
+				30CEC37C209D9C1F00134E64 /* libscheme.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,7 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				30CEE3F720759E5F0076C085 /* scheme */,
-				30CEC360209D99C700134E64 /* liblibscheme.a */,
+				30CEC360209D99C700134E64 /* libscheme.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,7 +200,7 @@
 			);
 			name = libscheme;
 			productName = libscheme;
-			productReference = 30CEC360209D99C700134E64 /* liblibscheme.a */;
+			productReference = 30CEC360209D99C700134E64 /* libscheme.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		30CEE3F620759E5F0076C085 /* scheme */ = {
@@ -303,7 +303,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GEA92R6RK9;
-				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_PREFIX = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -319,7 +319,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GEA92R6RK9;
-				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_PREFIX = "";
 				GCC_PREPROCESSOR_DEFINITIONS = NO_GC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
