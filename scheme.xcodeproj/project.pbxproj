@@ -49,6 +49,8 @@
 /* Begin PBXFileReference section */
 		08061B2FAC0E546C7C76353A /* Pods-SchemeREPLViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SchemeREPLViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SchemeREPLViewTests/Pods-SchemeREPLViewTests.debug.xcconfig"; sourceTree = "<group>"; };
 		30CEC360209D99C700134E64 /* libscheme.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libscheme.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		30CEC37D209D9C9200134E64 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		30CEC37E209D9C9300134E64 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		30CEE3F720759E5F0076C085 /* scheme */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = scheme; sourceTree = BUILT_PRODUCTS_DIR; };
 		30CEE40120759EC10076C085 /* scheme_fun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_fun.c; path = "libscheme-0.5/scheme_fun.c"; sourceTree = "<group>"; };
 		30CEE40220759EC10076C085 /* scheme_list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_list.c; path = "libscheme-0.5/scheme_list.c"; sourceTree = "<group>"; };
@@ -103,6 +105,8 @@
 		30CEE3EE20759E5F0076C085 = {
 			isa = PBXGroup;
 			children = (
+				30CEC37E209D9C9300134E64 /* LICENSE */,
+				30CEC37D209D9C9200134E64 /* README.md */,
 				30CEE40820759EC20076C085 /* main.c */,
 				30CEE42D2075A4760076C085 /* libscheme */,
 				30CEE3F820759E5F0076C085 /* Products */,
