@@ -24,7 +24,7 @@
 
 #include "scheme.h"
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   Scheme_Env *global_env;
   Scheme_Object *obj, *in_port;

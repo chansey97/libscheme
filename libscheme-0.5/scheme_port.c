@@ -24,6 +24,7 @@
 
 #include "scheme.h"
 #include <stdio.h>
+#include <string.h>
 
 #define HAS_STANDARD_IOB 1
 /* #define HAS_GNU_IOB 1 */
@@ -235,7 +236,10 @@ static int
 file_char_ready (Scheme_Input_Port *port)
 {
   FILE *fp = (FILE *) port->port_data;
-#ifdef HAS_STANDARD_IOB  
+#ifdef __APPLE__
+#warning idz -- dodgey edit in file_char_ready
+    return (fp->_r);
+#elif HAS_STANDARD_IOB
   return (fp->_cnt);
 #elif HAS_GNU_IOB
   return (fp->_egptr - fp->_gptr);

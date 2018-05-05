@@ -119,7 +119,7 @@ typedef struct Scheme_Object *
 
 /* error handling */
 extern jmp_buf scheme_error_buf;
-void scheme_signal_error (char *msg, ...);
+void scheme_signal_error (char *msg, ...) __attribute__((noreturn));
 void scheme_warning (char *msg, ...);
 void scheme_default_handler (void);
 #define SCHEME_CATCH_ERROR(try_expr, err_expr) \
