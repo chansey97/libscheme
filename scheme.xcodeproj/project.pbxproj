@@ -7,26 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30CEC348209D942800134E64 /* scheme_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40E20759EC30076C085 /* scheme_alloc.c */; };
-		30CEC349209D942800134E64 /* scheme_bool.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40720759EC20076C085 /* scheme_bool.c */; };
-		30CEC34A209D942800134E64 /* scheme_char.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40520759EC10076C085 /* scheme_char.c */; };
-		30CEC34B209D942800134E64 /* scheme_env.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41320759EC30076C085 /* scheme_env.c */; };
-		30CEC34C209D942800134E64 /* scheme_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40C20759EC20076C085 /* scheme_error.c */; };
-		30CEC34D209D942800134E64 /* scheme_eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41420759EC40076C085 /* scheme_eval.c */; };
-		30CEC34E209D942800134E64 /* scheme_fun.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40120759EC10076C085 /* scheme_fun.c */; };
-		30CEC34F209D942800134E64 /* scheme_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41220759EC30076C085 /* scheme_hash.c */; };
-		30CEC350209D942800134E64 /* scheme_list.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40220759EC10076C085 /* scheme_list.c */; };
-		30CEC351209D942800134E64 /* scheme_number.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40D20759EC20076C085 /* scheme_number.c */; };
-		30CEC352209D942800134E64 /* scheme_port.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40B20759EC20076C085 /* scheme_port.c */; };
-		30CEC353209D942800134E64 /* scheme_print.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41520759EC40076C085 /* scheme_print.c */; };
-		30CEC354209D942800134E64 /* scheme_promise.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40320759EC10076C085 /* scheme_promise.c */; };
-		30CEC355209D942800134E64 /* scheme_read.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40620759EC10076C085 /* scheme_read.c */; };
-		30CEC356209D942800134E64 /* scheme_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40F20759EC30076C085 /* scheme_string.c */; };
-		30CEC357209D942800134E64 /* scheme_struct.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41020759EC30076C085 /* scheme_struct.c */; };
-		30CEC358209D942800134E64 /* scheme_symbol.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40920759EC20076C085 /* scheme_symbol.c */; };
-		30CEC359209D942800134E64 /* scheme_syntax.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41120759EC30076C085 /* scheme_syntax.c */; };
-		30CEC35A209D942800134E64 /* scheme_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40420759EC10076C085 /* scheme_type.c */; };
-		30CEC35B209D942800134E64 /* scheme_vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40A20759EC20076C085 /* scheme_vector.c */; };
+		30CEC364209D99E000134E64 /* scheme_nummacs.h in Headers */ = {isa = PBXBuildFile; fileRef = 30CEE42B2075A1EC0076C085 /* scheme_nummacs.h */; };
+		30CEC365209D99E000134E64 /* scheme.h in Headers */ = {isa = PBXBuildFile; fileRef = 30CEE42C2075A1ED0076C085 /* scheme.h */; };
+		30CEC366209D99E000134E64 /* scheme_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40E20759EC30076C085 /* scheme_alloc.c */; };
+		30CEC367209D99E000134E64 /* scheme_bool.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40720759EC20076C085 /* scheme_bool.c */; };
+		30CEC368209D99E000134E64 /* scheme_char.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40520759EC10076C085 /* scheme_char.c */; };
+		30CEC369209D99E000134E64 /* scheme_env.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41320759EC30076C085 /* scheme_env.c */; };
+		30CEC36A209D99E000134E64 /* scheme_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40C20759EC20076C085 /* scheme_error.c */; };
+		30CEC36B209D99E000134E64 /* scheme_eval.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41420759EC40076C085 /* scheme_eval.c */; };
+		30CEC36C209D99E000134E64 /* scheme_fun.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40120759EC10076C085 /* scheme_fun.c */; };
+		30CEC36D209D99E000134E64 /* scheme_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41220759EC30076C085 /* scheme_hash.c */; };
+		30CEC36E209D99E000134E64 /* scheme_list.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40220759EC10076C085 /* scheme_list.c */; };
+		30CEC36F209D99E000134E64 /* scheme_number.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40D20759EC20076C085 /* scheme_number.c */; };
+		30CEC370209D99E000134E64 /* scheme_port.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40B20759EC20076C085 /* scheme_port.c */; };
+		30CEC371209D99E000134E64 /* scheme_print.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41520759EC40076C085 /* scheme_print.c */; };
+		30CEC372209D99E000134E64 /* scheme_promise.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40320759EC10076C085 /* scheme_promise.c */; };
+		30CEC373209D99E000134E64 /* scheme_read.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40620759EC10076C085 /* scheme_read.c */; };
+		30CEC374209D99E000134E64 /* scheme_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40F20759EC30076C085 /* scheme_string.c */; };
+		30CEC375209D99E000134E64 /* scheme_struct.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41020759EC30076C085 /* scheme_struct.c */; };
+		30CEC376209D99E000134E64 /* scheme_symbol.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40920759EC20076C085 /* scheme_symbol.c */; };
+		30CEC377209D99E000134E64 /* scheme_syntax.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE41120759EC30076C085 /* scheme_syntax.c */; };
+		30CEC378209D99E000134E64 /* scheme_type.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40420759EC10076C085 /* scheme_type.c */; };
+		30CEC379209D99E000134E64 /* scheme_vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40A20759EC20076C085 /* scheme_vector.c */; };
+		30CEC37A209D99E000134E64 /* scheme_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 30CEE4942079D2070076C085 /* scheme_internal.h */; };
+		30CEC37B209D9A1B00134E64 /* liblibscheme.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30CEC360209D99C700134E64 /* liblibscheme.a */; };
 		30CEE41D20759EC40076C085 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40820759EC20076C085 /* main.c */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		08061B2FAC0E546C7C76353A /* Pods-SchemeREPLViewTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SchemeREPLViewTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SchemeREPLViewTests/Pods-SchemeREPLViewTests.debug.xcconfig"; sourceTree = "<group>"; };
+		30CEC360209D99C700134E64 /* liblibscheme.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibscheme.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		30CEE3F720759E5F0076C085 /* scheme */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = scheme; sourceTree = BUILT_PRODUCTS_DIR; };
 		30CEE40120759EC10076C085 /* scheme_fun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_fun.c; path = "libscheme-0.5/scheme_fun.c"; sourceTree = "<group>"; };
 		30CEE40220759EC10076C085 /* scheme_list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = scheme_list.c; path = "libscheme-0.5/scheme_list.c"; sourceTree = "<group>"; };
@@ -77,10 +82,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		30CEC35D209D99C700134E64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		30CEE3F420759E5F0076C085 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30CEC37B209D9A1B00134E64 /* liblibscheme.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				30CEE3F720759E5F0076C085 /* scheme */,
+				30CEC360209D99C700134E64 /* liblibscheme.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,7 +172,37 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		30CEC35E209D99C700134E64 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30CEC364209D99E000134E64 /* scheme_nummacs.h in Headers */,
+				30CEC365209D99E000134E64 /* scheme.h in Headers */,
+				30CEC37A209D99E000134E64 /* scheme_internal.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		30CEC35F209D99C700134E64 /* libscheme */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 30CEC361209D99C700134E64 /* Build configuration list for PBXNativeTarget "libscheme" */;
+			buildPhases = (
+				30CEC35C209D99C700134E64 /* Sources */,
+				30CEC35D209D99C700134E64 /* Frameworks */,
+				30CEC35E209D99C700134E64 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libscheme;
+			productName = libscheme;
+			productReference = 30CEC360209D99C700134E64 /* liblibscheme.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		30CEE3F620759E5F0076C085 /* scheme */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 30CEE3FE20759E5F0076C085 /* Build configuration list for PBXNativeTarget "scheme" */;
@@ -186,6 +230,10 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Danny Keogan";
 				TargetAttributes = {
+					30CEC35F209D99C700134E64 = {
+						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
+					};
 					30CEE3F620759E5F0076C085 = {
 						CreatedOnToolsVersion = 9.3;
 						ProvisioningStyle = Automatic;
@@ -206,42 +254,78 @@
 			projectRoot = "";
 			targets = (
 				30CEE3F620759E5F0076C085 /* scheme */,
+				30CEC35F209D99C700134E64 /* libscheme */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		30CEC35C209D99C700134E64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30CEC36B209D99E000134E64 /* scheme_eval.c in Sources */,
+				30CEC36F209D99E000134E64 /* scheme_number.c in Sources */,
+				30CEC370209D99E000134E64 /* scheme_port.c in Sources */,
+				30CEC379209D99E000134E64 /* scheme_vector.c in Sources */,
+				30CEC368209D99E000134E64 /* scheme_char.c in Sources */,
+				30CEC373209D99E000134E64 /* scheme_read.c in Sources */,
+				30CEC374209D99E000134E64 /* scheme_string.c in Sources */,
+				30CEC371209D99E000134E64 /* scheme_print.c in Sources */,
+				30CEC372209D99E000134E64 /* scheme_promise.c in Sources */,
+				30CEC367209D99E000134E64 /* scheme_bool.c in Sources */,
+				30CEC375209D99E000134E64 /* scheme_struct.c in Sources */,
+				30CEC378209D99E000134E64 /* scheme_type.c in Sources */,
+				30CEC36A209D99E000134E64 /* scheme_error.c in Sources */,
+				30CEC377209D99E000134E64 /* scheme_syntax.c in Sources */,
+				30CEC36C209D99E000134E64 /* scheme_fun.c in Sources */,
+				30CEC376209D99E000134E64 /* scheme_symbol.c in Sources */,
+				30CEC369209D99E000134E64 /* scheme_env.c in Sources */,
+				30CEC36E209D99E000134E64 /* scheme_list.c in Sources */,
+				30CEC36D209D99E000134E64 /* scheme_hash.c in Sources */,
+				30CEC366209D99E000134E64 /* scheme_alloc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		30CEE3F320759E5F0076C085 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30CEC35A209D942800134E64 /* scheme_type.c in Sources */,
-				30CEC34F209D942800134E64 /* scheme_hash.c in Sources */,
-				30CEC351209D942800134E64 /* scheme_number.c in Sources */,
-				30CEC358209D942800134E64 /* scheme_symbol.c in Sources */,
-				30CEC34A209D942800134E64 /* scheme_char.c in Sources */,
-				30CEC355209D942800134E64 /* scheme_read.c in Sources */,
-				30CEC352209D942800134E64 /* scheme_port.c in Sources */,
-				30CEC353209D942800134E64 /* scheme_print.c in Sources */,
-				30CEC34C209D942800134E64 /* scheme_error.c in Sources */,
-				30CEC34E209D942800134E64 /* scheme_fun.c in Sources */,
-				30CEC350209D942800134E64 /* scheme_list.c in Sources */,
-				30CEC354209D942800134E64 /* scheme_promise.c in Sources */,
-				30CEC349209D942800134E64 /* scheme_bool.c in Sources */,
-				30CEC356209D942800134E64 /* scheme_string.c in Sources */,
-				30CEC34B209D942800134E64 /* scheme_env.c in Sources */,
-				30CEC35B209D942800134E64 /* scheme_vector.c in Sources */,
-				30CEC34D209D942800134E64 /* scheme_eval.c in Sources */,
-				30CEC359209D942800134E64 /* scheme_syntax.c in Sources */,
-				30CEC348209D942800134E64 /* scheme_alloc.c in Sources */,
 				30CEE41D20759EC40076C085 /* main.c in Sources */,
-				30CEC357209D942800134E64 /* scheme_struct.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		30CEC362209D99C700134E64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GEA92R6RK9;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					NO_GC,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		30CEC363209D99C700134E64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = GEA92R6RK9;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = NO_GC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		30CEE3FC20759E5F0076C085 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -377,6 +461,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		30CEC361209D99C700134E64 /* Build configuration list for PBXNativeTarget "libscheme" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30CEC362209D99C700134E64 /* Debug */,
+				30CEC363209D99C700134E64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		30CEE3F220759E5F0076C085 /* Build configuration list for PBXProject "scheme" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
