@@ -26,7 +26,7 @@
 #include <string.h>
 
 extern char *scheme_strdup (char *);
-static unsigned int scheme_hash (char *key);
+//static unsigned int scheme_hash (char *key);
 
 Scheme_Hash_Table *
 scheme_hash_table (int size)
@@ -87,39 +87,39 @@ scheme_lookup_in_table (Scheme_Hash_Table *table, char *key)
   return (NULL);
 }
 
-void
-scheme_change_in_table (Scheme_Hash_Table *table, char *key, void *new)
+void scheme_change_in_table (Scheme_Hash_Table *table, char *key, void *new)
 {
-  unsigned int h, i;
-  Scheme_Bucket *bucket;
-
-  h = i = 0;
-  while ( key[i] )
+    unsigned int h, i;
+    Scheme_Bucket *bucket;
+    
+    h = i = 0;
+    while ( key[i] )
     {
-      h += (h << 5) + h + key[i++];
+        h += (h << 5) + h + key[i++];
     }
-  h = h % table->size;
-  bucket = table->buckets[h];
-  while ( bucket )
+    h = h % table->size;
+    bucket = table->buckets[h];
+    while ( bucket )
     {
-      if (strcmp (key, bucket->key) == 0)
-	{
-	  bucket->val = new;
-	  return;
-	}
-      bucket = bucket->next;
+        if (strcmp (key, bucket->key) == 0)
+        {
+            bucket->val = new;
+            return;
+        }
+        bucket = bucket->next;
     }
 }
 
-static unsigned int 
-scheme_hash (char *key)
-{
-  unsigned int h;
-
-  h = 0;
-  while (*key)
-    {
-      h += (h << 5) + h + *key++;
-    }
-  return (h);
-}
+// idz -- this was unused -- looks like it was
+// manually inlined above.
+//static unsigned int scheme_hash (char *key)
+//{
+//    unsigned int h;
+//
+//    h = 0;
+//    while (*key)
+//    {
+//        h += (h << 5) + h + *key++;
+//    }
+//    return (h);
+//}

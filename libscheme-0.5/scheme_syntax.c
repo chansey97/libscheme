@@ -101,11 +101,8 @@ scheme_make_syntax (Scheme_Syntax *proc)
 
 /* builtin syntax */
 
-static Scheme_Object *
-lambda_syntax (Scheme_Object *form, Scheme_Env *env)
+static Scheme_Object *lambda_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *params;
-
   SCHEME_ASSERT (SCHEME_PAIRP(form), "badly formed lambda");
   SCHEME_ASSERT (SCHEME_PAIRP(SCHEME_CDR(form)), "badly formed lambda");
   return (scheme_make_closure (env, SCHEME_CDR(form)));
@@ -240,45 +237,45 @@ cond_syntax (Scheme_Object *form, Scheme_Env *env)
 static Scheme_Object *
 case_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *key, *clauses, *clause;
-  Scheme_Object *data, *exprs, *res;
-
-  key = SCHEME_CAR (SCHEME_CDR (form));
-  clauses = SCHEME_CDR (SCHEME_CDR (form));
-
-  key = scheme_eval (key, env);
-  while (! SCHEME_NULLP (clauses))
+    Scheme_Object *key, *clauses, *clause;
+    Scheme_Object *data, *exprs, *res = NULL;
+    
+    key = SCHEME_CAR (SCHEME_CDR (form));
+    clauses = SCHEME_CDR (SCHEME_CDR (form));
+    
+    key = scheme_eval (key, env);
+    while (! SCHEME_NULLP (clauses))
     {
-      clause = SCHEME_CAR (clauses);
-      data = SCHEME_CAR (clause);
-      if (SCHEME_SYMBOLP (data) && (scheme_intern_symbol("else") == data))
-	{
-	  exprs = SCHEME_CDR (clause);
-	  while (! SCHEME_NULLP (exprs))
-	    {
-	      res = scheme_eval (SCHEME_CAR (exprs), env);
-	      exprs = SCHEME_CDR (exprs);
-	    }
-	  return (res);
-	}
-      SCHEME_ASSERT (SCHEME_PAIRP(data), "case: first thing in clause must be a list");
-      while (! SCHEME_NULLP (data))
-	{
-	  if (scheme_eqv (SCHEME_CAR (data), key))
-	    {
-	      exprs = SCHEME_CDR (clause);
-	      while (! SCHEME_NULLP (exprs))
-		{
-		  res = scheme_eval (SCHEME_CAR (exprs), env);
-		  exprs = SCHEME_CDR (exprs);
-		}
-	      return (res);
-	    }
-	  data = SCHEME_CDR (data);
-	}
-      clauses = SCHEME_CDR (clauses);
+        clause = SCHEME_CAR (clauses);
+        data = SCHEME_CAR (clause);
+        if (SCHEME_SYMBOLP (data) && (scheme_intern_symbol("else") == data))
+        {
+            exprs = SCHEME_CDR (clause);
+            while (! SCHEME_NULLP (exprs))
+            {
+                res = scheme_eval (SCHEME_CAR (exprs), env);
+                exprs = SCHEME_CDR (exprs);
+            }
+            return (res);
+        }
+        SCHEME_ASSERT (SCHEME_PAIRP(data), "case: first thing in clause must be a list");
+        while (! SCHEME_NULLP (data))
+        {
+            if (scheme_eqv (SCHEME_CAR (data), key))
+            {
+                exprs = SCHEME_CDR (clause);
+                while (! SCHEME_NULLP (exprs))
+                {
+                    res = scheme_eval (SCHEME_CAR (exprs), env);
+                    exprs = SCHEME_CDR (exprs);
+                }
+                return (res);
+            }
+            data = SCHEME_CDR (data);
+        }
+        clauses = SCHEME_CDR (clauses);
     }
-  return (scheme_false);
+    return (scheme_false);
 }
 
 static Scheme_Object *
@@ -325,101 +322,101 @@ static Scheme_Object *named_let_syntax (Scheme_Object *form, Scheme_Env *env);
 static Scheme_Object *
 let_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *bindings, *binding, *vars, *vals, *ev_vals, *forms, *ret;
-  Scheme_Object *vars_last, *vals_last, *pair, *aform;
-  int num_int_defs, num_bindings, i;
-  Scheme_Env *frame;
-
-  if (SCHEME_SYMBOLP (SCHEME_CAR (SCHEME_CDR (form))))
+    Scheme_Object *bindings, *binding, *vars, *vals,  *forms, *ret = NULL;
+    Scheme_Object *vars_last, *vals_last, *pair, *aform;
+    int num_int_defs, num_bindings, i;
+    Scheme_Env *frame;
+    
+    if (SCHEME_SYMBOLP (SCHEME_CAR (SCHEME_CDR (form))))
     {
-      return (named_let_syntax (form, env));
+        return (named_let_syntax (form, env));
     }
-  SCHEME_ASSERT ((scheme_list_length(form) >= 3), "badly formed `let' form");
-  bindings = SCHEME_CAR (SCHEME_CDR (form));
-  num_bindings = scheme_list_length (bindings);
-  frame = scheme_new_frame (num_bindings);
-  for ( i=0 ; i<num_bindings; ++i )
+    SCHEME_ASSERT ((scheme_list_length(form) >= 3), "badly formed `let' form");
+    bindings = SCHEME_CAR (SCHEME_CDR (form));
+    num_bindings = scheme_list_length (bindings);
+    frame = scheme_new_frame (num_bindings);
+    for ( i=0 ; i<num_bindings; ++i )
     {
-      binding = SCHEME_CAR (bindings);
-      scheme_add_binding (i, SCHEME_CAR (binding), scheme_eval (SCHEME_CADR (binding), env), frame);
-      bindings = SCHEME_CDR (bindings);
+        binding = SCHEME_CAR (bindings);
+        scheme_add_binding (i, SCHEME_CAR (binding), scheme_eval (SCHEME_CADR (binding), env), frame);
+        bindings = SCHEME_CDR (bindings);
     }
-  env = scheme_extend_env (frame, env);
-  forms = SCHEME_CDR (SCHEME_CDR (form));
-
-  /* process internal defines */
-  num_int_defs = 0;
-  vars = vals = vars_last = vals_last = scheme_null;
-  while (!SCHEME_NULLP(forms) && internal_def_p (SCHEME_CAR(forms)))
+    env = scheme_extend_env (frame, env);
+    forms = SCHEME_CDR (SCHEME_CDR (form));
+    
+    /* process internal defines */
+    num_int_defs = 0;
+    vars = vals = vars_last = vals_last = scheme_null;
+    while (!SCHEME_NULLP(forms) && internal_def_p (SCHEME_CAR(forms)))
     {
-      num_int_defs++;
-      aform = SCHEME_CAR (forms);
-      /* get var */
-      if (SCHEME_PAIRP (SCHEME_CAR (SCHEME_CDR (aform))))
-	{
-	  pair = scheme_make_pair (SCHEME_CAR (SCHEME_CAR (SCHEME_CDR (aform))), scheme_null);
-	}
-      else
-	{
-	  pair = scheme_make_pair (SCHEME_CAR (SCHEME_CDR (aform)), scheme_null);
-	}
-      if (SCHEME_NULLP (vars))
-	{
-	  vars = vars_last = pair;
-	}
-      else
-	{
-	  SCHEME_CDR (vars_last) = pair;
-	  vars_last = pair;
-	}
-      /* get val */
-      if (SCHEME_PAIRP (SCHEME_CAR (SCHEME_CDR (aform))))
-	{
-	  pair = CONS (CONS (scheme_lambda, CONS (SCHEME_CDR (SCHEME_CAR (SCHEME_CDR (aform))),
-						  SCHEME_CDR (SCHEME_CDR (aform)))),
-		       scheme_null);
-	}
-      else
-	{
-	  pair = scheme_make_pair (SCHEME_CAR (SCHEME_CDR (SCHEME_CDR (aform))), scheme_null);
-	}
-      if (SCHEME_NULLP (vals))
-	{
-	  vals = vals_last = pair;
-	}
-      else
-	{
-	  SCHEME_CDR (vals_last) = pair;
-	  vals_last = pair;
-	}
-      forms = SCHEME_CDR (forms);
+        num_int_defs++;
+        aform = SCHEME_CAR (forms);
+        /* get var */
+        if (SCHEME_PAIRP (SCHEME_CAR (SCHEME_CDR (aform))))
+        {
+            pair = scheme_make_pair (SCHEME_CAR (SCHEME_CAR (SCHEME_CDR (aform))), scheme_null);
+        }
+        else
+        {
+            pair = scheme_make_pair (SCHEME_CAR (SCHEME_CDR (aform)), scheme_null);
+        }
+        if (SCHEME_NULLP (vars))
+        {
+            vars = vars_last = pair;
+        }
+        else
+        {
+            SCHEME_CDR (vars_last) = pair;
+            vars_last = pair;
+        }
+        /* get val */
+        if (SCHEME_PAIRP (SCHEME_CAR (SCHEME_CDR (aform))))
+        {
+            pair = CONS (CONS (scheme_lambda, CONS (SCHEME_CDR (SCHEME_CAR (SCHEME_CDR (aform))),
+                                                    SCHEME_CDR (SCHEME_CDR (aform)))),
+                         scheme_null);
+        }
+        else
+        {
+            pair = scheme_make_pair (SCHEME_CAR (SCHEME_CDR (SCHEME_CDR (aform))), scheme_null);
+        }
+        if (SCHEME_NULLP (vals))
+        {
+            vals = vals_last = pair;
+        }
+        else
+        {
+            SCHEME_CDR (vals_last) = pair;
+            vals_last = pair;
+        }
+        forms = SCHEME_CDR (forms);
     }
-  if ( num_int_defs )
+    if ( num_int_defs )
     {
-      env = scheme_add_frame (vars, scheme_alloc_list (num_int_defs), env);
-      while (! SCHEME_NULLP (vars))
-	{
-	  scheme_set_value (SCHEME_CAR(vars),
-			    scheme_eval (SCHEME_CAR (vals), env),
-			    env);
-	  vars = SCHEME_CDR (vars);
-	  vals = SCHEME_CDR (vals);
-	}
+        env = scheme_add_frame (vars, scheme_alloc_list (num_int_defs), env);
+        while (! SCHEME_NULLP (vars))
+        {
+            scheme_set_value (SCHEME_CAR(vars),
+                              scheme_eval (SCHEME_CAR (vals), env),
+                              env);
+            vars = SCHEME_CDR (vars);
+            vals = SCHEME_CDR (vals);
+        }
     }
-
-  while (forms != scheme_null)
+    
+    while (forms != scheme_null)
     {
-      ret = scheme_eval (SCHEME_CAR (forms), env);
-      forms = SCHEME_CDR (forms);
+        ret = scheme_eval (SCHEME_CAR (forms), env);
+        forms = SCHEME_CDR (forms);
     }
-  /* pop internal define frame */
-  if ( num_int_defs )
+    /* pop internal define frame */
+    if ( num_int_defs )
     {
-      env = scheme_pop_frame (env);
+        env = scheme_pop_frame (env);
     }
-  /* pop regular binding frame */
-  env = scheme_pop_frame (env);
-  return (ret);
+    /* pop regular binding frame */
+    env = scheme_pop_frame (env);
+    return (ret);
 }
 
 static int 
@@ -454,7 +451,7 @@ named_let_syntax (Scheme_Object *form, Scheme_Env *env)
 static Scheme_Object *
 let_star_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *bindings, *vars, *vals, *ev_vals, *forms, *ret;
+  Scheme_Object *bindings, *vars, *vals,  *forms, *ret = NULL;
   Scheme_Object *vars_last, *vals_last, *pair, *aform;
   Scheme_Env *frame;
   int num_int_defs, num_bindings, i;
@@ -559,7 +556,7 @@ let_star_syntax (Scheme_Object *form, Scheme_Env *env)
 static Scheme_Object *
 letrec_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *bindings, *vars, *vals, *forms, *res;
+  Scheme_Object *bindings, *vars, *vals, *forms, *res = NULL;
   Scheme_Object *vars_last, *vals_last, *pair, *aform;
   int num_int_defs;
 
@@ -673,7 +670,7 @@ do_syntax (Scheme_Object *form, Scheme_Env *env)
   Scheme_Object *second, *third;
   Scheme_Object *vars, *inits, *steps;
   Scheme_Object *test, *finals, *forms;
-  Scheme_Object *ret, *temp, *temp2;
+  Scheme_Object *ret, *temp;
   Scheme_Object *step_first, *step_last, *clause, *pair;
 
   second = SCHEME_CAR (SCHEME_CDR (form));
@@ -780,8 +777,6 @@ static Scheme_Object *quasi (Scheme_Object *x, int level, Scheme_Env *env);
 static Scheme_Object *
 quasiquote_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *template;
-
   SCHEME_ASSERT ((scheme_list_length (form) == 2), "quasiquote(`): wrong number of args");
   return (quasi (SCHEME_CAR (SCHEME_CDR (form)), 0, env));
 }
@@ -789,77 +784,77 @@ quasiquote_syntax (Scheme_Object *form, Scheme_Env *env)
 static Scheme_Object *
 quasi (Scheme_Object *x, int level, Scheme_Env *env)
 {
-  Scheme_Object *form, *list, *tail, *cell, *qcar, *qcdr, *ret;
-
-  if (SCHEME_VECTORP (x))
+    Scheme_Object *form, *list, *tail, *cell, *qcar, *qcdr, *ret;
+    
+    if (SCHEME_VECTORP (x))
     {
-      x = scheme_vector_to_list (x);
-      x = quasi (x, level, env);
-      return (scheme_list_to_vector (x));
+        x = scheme_vector_to_list (x);
+        x = quasi (x, level, env);
+        return (scheme_list_to_vector (x));
     }
-  if (! SCHEME_PAIRP (x))
+    if (! SCHEME_PAIRP (x))
     {
-      return x;
+        return x;
     }
-  if (SCHEME_CAR (x) == scheme_unquote)
+    if (SCHEME_CAR (x) == scheme_unquote)
     {
-      x = SCHEME_CDR (x);
-      SCHEME_ASSERT (SCHEME_PAIRP (x), "bad unquote form");
-      if (level) 
-	{
-	  ret = scheme_make_pair (SCHEME_CAR (x), scheme_null);
-	  ret = quasi (ret, level-1, env);
-	  ret = scheme_make_pair (scheme_unquote, ret);
+        x = SCHEME_CDR (x);
+        SCHEME_ASSERT (SCHEME_PAIRP (x), "bad unquote form");
+        if (level) 
+        {
+            ret = scheme_make_pair (SCHEME_CAR (x), scheme_null);
+            ret = quasi (ret, level-1, env);
+            ret = scheme_make_pair (scheme_unquote, ret);
         } 
-      else 
-	{
-	  ret = scheme_eval (SCHEME_CAR (x), env);
-	}
-      return ret;
+        else 
+        {
+            ret = scheme_eval (SCHEME_CAR (x), env);
+        }
+        return ret;
     } 
-  else if (SCHEME_PAIRP (SCHEME_CAR (x))
-	   && SCHEME_CAR (SCHEME_CAR (x)) == scheme_unquote_splicing)
+    else if (SCHEME_PAIRP (SCHEME_CAR (x))
+             && SCHEME_CAR (SCHEME_CAR (x)) == scheme_unquote_splicing)
     {
-      qcdr = SCHEME_CDR (x);
-      form = list = tail = cell = scheme_null;
-      x = SCHEME_CAR (x);
-      SCHEME_ASSERT (SCHEME_PAIRP (SCHEME_CDR (x)), "bad unquote-splicing form");
-      if (level) 
-	{
-	  list = quasi (SCHEME_CDR (x), level-1, env);
-	  list = scheme_make_pair (scheme_unquote_splicing, list);
-	  qcdr = quasi (qcdr, level, env);
-	  list = scheme_make_pair (list, qcdr);
-	  return list;
-	}
-      form = scheme_eval (SCHEME_CAR (SCHEME_CDR (x)), env);
-      for ( ; SCHEME_PAIRP(form) ; tail = cell, form = SCHEME_CDR (form)) 
-	{
-	  cell = scheme_make_pair (SCHEME_CAR (form), scheme_null);
-	  if (SCHEME_NULLP (list))
-	    list = cell;
-	  else
-	    SCHEME_CDR(tail) = cell;
-	}
-      qcdr = quasi (qcdr, level, env);
-      if (SCHEME_NULLP (list))
-	{
-	  return qcdr;
-	}
-      SCHEME_CDR (tail) = qcdr;
-      return list;
+        qcdr = SCHEME_CDR (x);
+        form = list = tail = cell = scheme_null;
+        x = SCHEME_CAR (x);
+        SCHEME_ASSERT (SCHEME_PAIRP (SCHEME_CDR (x)), "bad unquote-splicing form");
+        if (level) 
+        {
+            list = quasi (SCHEME_CDR (x), level-1, env);
+            list = scheme_make_pair (scheme_unquote_splicing, list);
+            qcdr = quasi (qcdr, level, env);
+            list = scheme_make_pair (list, qcdr);
+            return list;
+        }
+        form = scheme_eval (SCHEME_CAR (SCHEME_CDR (x)), env);
+        for ( ; SCHEME_PAIRP(form) ; tail = cell, form = SCHEME_CDR (form)) 
+        {
+            cell = scheme_make_pair (SCHEME_CAR (form), scheme_null);
+            if (SCHEME_NULLP (list))
+                list = cell;
+            else
+                SCHEME_CDR(tail) = cell;
+        }
+        qcdr = quasi (qcdr, level, env);
+        if (SCHEME_NULLP (list))
+        {
+            return qcdr;
+        }
+        SCHEME_CDR (tail) = qcdr;
+        return list;
     } 
-  else 
+    else 
     {
-      qcar = qcdr = scheme_null;
-      if (SCHEME_CAR (x) == scheme_quasiquote)   /* hack! */
-	{
-	  ++level;
-	}
-      qcar = quasi (SCHEME_CAR (x), level, env);
-      qcdr = quasi (SCHEME_CDR (x), level, env);
-      list = scheme_make_pair (qcar, qcdr);
-      return list;
+        qcar = qcdr = scheme_null;
+        if (SCHEME_CAR (x) == scheme_quasiquote)   /* hack! */
+        {
+            ++level;
+        }
+        qcar = quasi (SCHEME_CAR (x), level, env);
+        qcdr = quasi (SCHEME_CDR (x), level, env);
+        list = scheme_make_pair (qcar, qcdr);
+        return list;
     }
 }
 

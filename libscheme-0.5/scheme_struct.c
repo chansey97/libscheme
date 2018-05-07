@@ -23,6 +23,8 @@
 */
 
 #include "scheme.h"
+#include "scheme_internal.h"
+#include <string.h>
 
 struct Scheme_Struct_Proc
 {
@@ -111,41 +113,40 @@ scheme_apply_struct_proc (Scheme_Object *sp, Scheme_Object *args)
     }
 }
 
-static Scheme_Object *
-define_struct_syntax (Scheme_Object *form, Scheme_Env *env)
+static Scheme_Object *define_struct_syntax (Scheme_Object *form, Scheme_Env *env)
 {
-  Scheme_Object *type_symbol, *field_symbols;
-  Scheme_Object *getters, *last_getter;
-  Scheme_Object *setters, *last_setter;
-  Scheme_Object *struct_symbol, *pred_symbol;
-  Scheme_Object *constructor_symbol, *type_obj;
-  char *struct_name, *struct_type_name, *field_name;
-  int slot_num;
-
-  struct_symbol = SCHEME_CAR (SCHEME_CDR (form));
-  field_symbols = SCHEME_CAR (SCHEME_CDR (SCHEME_CDR (form)));
-  struct_name = SCHEME_STR_VAL (struct_symbol);
-  
-  struct_type_name = type_name (struct_name);
-  type_obj = scheme_make_type (struct_type_name);
-  scheme_add_global (struct_type_name, type_obj, env);
-
-  scheme_add_global (constructor_name (struct_name), 
-		     scheme_make_constructor (type_obj, scheme_list_length (field_symbols)), env);
-  scheme_add_global (pred_name (struct_name), scheme_make_pred (type_obj), env);
-
-  getters = last_getter = setters = last_setter = scheme_null;
-  slot_num = 0;
-  while (! SCHEME_NULLP (field_symbols))
+    Scheme_Object *field_symbols;
+    Scheme_Object *getters, *last_getter;
+    Scheme_Object *setters, *last_setter;
+    Scheme_Object *struct_symbol;
+    Scheme_Object *type_obj;
+    char *struct_name, *struct_type_name, *field_name;
+    int slot_num;
+    
+    struct_symbol = SCHEME_CAR (SCHEME_CDR (form));
+    field_symbols = SCHEME_CAR (SCHEME_CDR (SCHEME_CDR (form)));
+    struct_name = SCHEME_STR_VAL (struct_symbol);
+    
+    struct_type_name = type_name (struct_name);
+    type_obj = scheme_make_type (struct_type_name);
+    scheme_add_global (struct_type_name, type_obj, env);
+    
+    scheme_add_global (constructor_name (struct_name),
+                       scheme_make_constructor (type_obj, scheme_list_length (field_symbols)), env);
+    scheme_add_global (pred_name (struct_name), scheme_make_pred (type_obj), env);
+    
+    getters = last_getter = setters = last_setter = scheme_null;
+    slot_num = 0;
+    while (! SCHEME_NULLP (field_symbols))
     {
-      SCHEME_ASSERT (SCHEME_PAIRP (field_symbols), "badly construct define-struct form");
-      field_name = SCHEME_STR_VAL (SCHEME_CAR (field_symbols));
-      scheme_add_global (getter_name (struct_name, field_name), scheme_make_getter (type_obj, slot_num), env);
-      scheme_add_global (setter_name (struct_name, field_name), scheme_make_setter (type_obj, slot_num), env);
-      field_symbols = SCHEME_CDR (field_symbols);
-      slot_num++;
+        SCHEME_ASSERT (SCHEME_PAIRP (field_symbols), "badly construct define-struct form");
+        field_name = SCHEME_STR_VAL (SCHEME_CAR (field_symbols));
+        scheme_add_global (getter_name (struct_name, field_name), scheme_make_getter (type_obj, slot_num), env);
+        scheme_add_global (setter_name (struct_name, field_name), scheme_make_setter (type_obj, slot_num), env);
+        field_symbols = SCHEME_CDR (field_symbols);
+        slot_num++;
     }
-  return (struct_symbol);
+    return (struct_symbol);
 }
 
 static Scheme_Object *
@@ -206,7 +207,7 @@ type_name (char *struct_name)
   int orig_len, add_len;
   char *name;
 
-  orig_len = strlen (struct_name);
+  orig_len = scheme_strlen (struct_name);
   add_len = 2;			/* strlen("<") + strlen(">") */
   name = (char *) scheme_malloc (sizeof(char) * (orig_len + add_len + 1));
   name[0] = '<';
@@ -223,7 +224,7 @@ constructor_name (char *struct_name)
   int orig_len, make_len;
   char *name;
 
-  orig_len = strlen (struct_name);
+  orig_len = scheme_strlen (struct_name);
   make_len = 5;			/* strlen ("make-") */
   name = (char *) scheme_malloc (sizeof (char) * (orig_len + make_len + 1));
   strcpy (name, "make-");
@@ -231,18 +232,17 @@ constructor_name (char *struct_name)
   return (name);
 }
 
-static char *
-pred_name (char *struct_name)
+static char *pred_name (char *struct_name)
 {
-  int orig_len;
-  char *name;
-
-  orig_len = strlen (struct_name);
-  name = (char *) scheme_malloc (sizeof(char) * (orig_len + 1 + 1));
-  strcpy (name, struct_name);
-  name[orig_len] = '?';
-  name[orig_len+1] = '\0';
-  return (name);
+    int orig_len;
+    char *name;
+    
+    orig_len = scheme_strlen (struct_name);
+    name = (char *) scheme_malloc (sizeof(char) * (orig_len + 1 + 1));
+    strcpy (name, struct_name);
+    name[orig_len] = '?';
+    name[orig_len+1] = '\0';
+    return (name);
 }
 
 static char *
@@ -251,8 +251,8 @@ getter_name (char *struct_name, char *field_name)
   int name_len, field_len, dash_len;
   char *name;
 
-  name_len = strlen (struct_name);
-  field_len = strlen (field_name);
+  name_len = scheme_strlen (struct_name);
+  field_len = scheme_strlen (field_name);
   dash_len = 1;			/* strlen ("-") */
   name = (char *) scheme_malloc (sizeof (char) * (name_len + dash_len + field_len + 1));
   strcpy (name, struct_name);
@@ -267,8 +267,8 @@ setter_name (char *struct_name, char *field_name)
   int set_len, name_len, field_len, dash_len, bang_len;
   char *name;
 
-  name_len = strlen (struct_name);
-  field_len = strlen (field_name);
+  name_len = scheme_strlen (struct_name);
+  field_len = scheme_strlen (field_name);
   set_len = 4;			/* strlen ("set-") */
   dash_len = 1;			/* strlen ("-") */
   bang_len = 1;			/* strlen ("!") */

@@ -32,7 +32,7 @@
 
 /* local function prototypes */
 
-static Scheme_Object *read_char (Scheme_Object *port);
+//static Scheme_Object *read_char (Scheme_Object *port);
 static Scheme_Object *read_list (Scheme_Object *port);
 static Scheme_Object *read_string (Scheme_Object *port);
 static Scheme_Object *read_quote (Scheme_Object *port);
@@ -145,58 +145,57 @@ scheme_read (Scheme_Object *port)
     }
 }
 
-static Scheme_Object *
-read_char (Scheme_Object *port)
-{
-  int ch;
-
-  ch = scheme_getc (port);
-  if (ch == EOF)
-    {
-      return (scheme_eof);
-    }
-  else
-    {
-      return (scheme_make_char (ch));
-    }
-}
+//static Scheme_Object *
+//read_char (Scheme_Object *port)
+//{
+//  int ch;
+//
+//  ch = scheme_getc (port);
+//  if (ch == EOF)
+//    {
+//      return (scheme_eof);
+//    }
+//  else
+//    {
+//      return (scheme_make_char (ch));
+//    }
+//}
 
 /* "(" has already been read */
-static Scheme_Object *
-read_list (Scheme_Object *port)
+static Scheme_Object *read_list (Scheme_Object *port)
 {
-  Scheme_Object *obj, *car, *cdr;
-  int ch;
-
-  skip_whitespace_comments (port);
-  if (peek_char(port) == ')')
+    Scheme_Object *car, *cdr;
+    int ch;
+    
+    skip_whitespace_comments (port);
+    if (peek_char(port) == ')')
     {
-      ch = scheme_getc (port);
-      return (scheme_null);
+        ch = scheme_getc (port);
+        return (scheme_null);
     }
-  car = scheme_read (port);
-  skip_whitespace_comments (port);
-  if (peek_char(port) == ')')
+    car = scheme_read (port);
+    skip_whitespace_comments (port);
+    if (peek_char(port) == ')')
     {
-      ch = scheme_getc (port);
-      cdr = scheme_null;
+        ch = scheme_getc (port);
+        cdr = scheme_null;
     }
-  else if ((peek_char(port) == '.') && isspace (double_peek_char(port)))
+    else if ((peek_char(port) == '.') && isspace (double_peek_char(port)))
     {
-      ch = scheme_getc (port);
-      cdr = scheme_read (port);
-      skip_whitespace_comments (port);
-      if (peek_char(port) != ')')
-	{
-	  scheme_signal_error ("read: malformed list");
-	}
-      ch = scheme_getc (port);
+        ch = scheme_getc (port);
+        cdr = scheme_read (port);
+        skip_whitespace_comments (port);
+        if (peek_char(port) != ')')
+        {
+            scheme_signal_error ("read: malformed list");
+        }
+        ch = scheme_getc (port);
     }
-  else
+    else
     {
-      cdr = read_list (port);
+        cdr = read_list (port);
     }
-  return (scheme_make_pair (car, cdr));
+    return (scheme_make_pair (car, cdr));
 }
 
 /* '"' has already been read */

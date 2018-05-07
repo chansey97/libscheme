@@ -29,6 +29,7 @@
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #ifdef __cplusplus
 extern "C" 
@@ -59,13 +60,21 @@ struct Scheme_Env
   struct Scheme_Env *next;
 };
 typedef struct Scheme_Env Scheme_Env;
-
+    
+/**
+ * The base integer type.
+ *
+ * Switch from literal constant to `INT_MAX` for 64-bit. -- idz
+ */
+typedef int scheme_integer;
+#define scheme_integer_max INT_MAX 
+    
 struct Scheme_Object
 {
   union
     {
       char char_val;
-      int int_val;
+      scheme_integer int_val;
       double double_val;
       char *string_val;
       void *ptr_val;
@@ -116,6 +125,21 @@ typedef struct Scheme_Object *
 
 typedef struct Scheme_Object *
 (Scheme_Syntax) (struct Scheme_Object *form, struct Scheme_Env *env);
+    
+/*
+ * The original code's implementation of call_cc
+ * relied on passing a pointer
+ * to a Scheme_Object back as the integer return value
+ * from setjmp. That's possible in a 64-bit compile.
+ * Instead we provide space for an object to be
+ * associated with the buffer. -- idz
+ */
+struct Scheme_Cont {
+    jmp_buf jmp_buf;
+    Scheme_Object *object;
+};
+    
+typedef struct Scheme_Cont Scheme_Cont;
 
 /* error handling */
 extern jmp_buf scheme_error_buf;
@@ -184,13 +208,13 @@ void *scheme_lookup_in_table (Scheme_Hash_Table *table, char *key);
 /* constructors */
 Scheme_Object *scheme_make_prim (Scheme_Prim *prim);
 Scheme_Object *scheme_make_closure (Scheme_Env *env, Scheme_Object *code);
-Scheme_Object *scheme_make_cont (jmp_buf buf);
+Scheme_Object *scheme_make_cont (Scheme_Cont *cont);
 Scheme_Object *scheme_make_type (char *name);
 Scheme_Object *scheme_make_pair (Scheme_Object *car, Scheme_Object *cdr);
 Scheme_Object *scheme_make_string (char *chars);
 Scheme_Object *scheme_alloc_string (int size, char fill);
 Scheme_Object *scheme_make_vector (int size, Scheme_Object *fill);
-Scheme_Object *scheme_make_integer (int i);
+Scheme_Object *scheme_make_integer (scheme_integer i);
 Scheme_Object *scheme_make_double (double d);
 Scheme_Object *scheme_make_char (char ch);
 Scheme_Object *scheme_make_syntax (Scheme_Syntax *syntax);

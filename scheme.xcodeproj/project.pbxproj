@@ -34,6 +34,16 @@
 		30CEE41D20759EC40076C085 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 30CEE40820759EC20076C085 /* main.c */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		30CEC37F209DBB0900134E64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 30CEE3EF20759E5F0076C085 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 30CEC35F209D99C700134E64;
+			remoteInfo = libscheme;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		30CEE3F520759E5F0076C085 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -218,6 +228,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				30CEC380209DBB0900134E64 /* PBXTargetDependency */,
 			);
 			name = scheme;
 			productName = scheme;
@@ -300,6 +311,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		30CEC380209DBB0900134E64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 30CEC35F209D99C700134E64 /* libscheme */;
+			targetProxy = 30CEC37F209DBB0900134E64 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		30CEC362209D99C700134E64 /* Debug */ = {

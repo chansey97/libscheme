@@ -23,6 +23,7 @@
 */
 
 #include "scheme.h"
+#include "scheme_internal.h"
 
 #define SCHEME_MAX_PRINT_SIZE 256000
 
@@ -106,7 +107,7 @@ print (char *str, int index, Scheme_Object *obj, int escaped)
   if (type==scheme_type_type || type==scheme_symbol_type)
     {
       sprintf ((str + index), "%s", SCHEME_STR_VAL (obj));
-      index += strlen (SCHEME_STR_VAL (obj));
+      index += scheme_strlen (SCHEME_STR_VAL (obj));
     }
   else if (type==scheme_string_type)
     {
@@ -119,12 +120,12 @@ print (char *str, int index, Scheme_Object *obj, int escaped)
   else if (type==scheme_integer_type)
     {
       sprintf ((str + index), "%d", SCHEME_INT_VAL (obj));
-      index += strlen (str + index);
+      index += scheme_strlen (str + index);
     }
   else if (type==scheme_double_type)
     {
       sprintf ((str + index), "%f", SCHEME_DBL_VAL (obj));
-      index += strlen (str + index);
+      index += scheme_strlen (str + index);
     }
   else if (type==scheme_null_type)
     {
@@ -152,61 +153,59 @@ print (char *str, int index, Scheme_Object *obj, int escaped)
   else
     {
       sprintf ((str + index), "#%s", SCHEME_STR_VAL(SCHEME_TYPE(obj)));
-      index += strlen (str + index);
+      index += scheme_strlen (str + index);
     }
   return (index);
 }
 
-static int
-print_string (char *buf, int index, Scheme_Object *string, int escaped)
+static int print_string (char *buf, int index, Scheme_Object *string, int escaped)
 {
-  char *str;
-
-  str = SCHEME_STR_VAL (string);
-  if ( escaped )
+    char *str;
+    
+    str = SCHEME_STR_VAL (string);
+    if ( escaped )
     {
-      buf[index++] = '"';
+        buf[index++] = '"';
     }
-  while ( *str )
+    while ( *str )
     {
-      if (escaped && ((*str == '"') || (*str == '\\')))
-	{
-	  buf[index++] = '\\';
-	}
-      buf[index++] = *str;
-      *str++;
+        if (escaped && ((*str == '"') || (*str == '\\')))
+        {
+            buf[index++] = '\\';
+        }
+        buf[index++] = *str;
+        // idz -- was *str++
+        str++;
     }
-  if ( escaped )
+    if ( escaped )
     {
-      buf[index++] = '"';
+        buf[index++] = '"';
     }
-  return (index);
+    return (index);
 }
 
-static int
-print_pair (char *str, int index, Scheme_Object *pair, int escaped)
+static int print_pair (char *str, int index, Scheme_Object *pair, int escaped)
 {
-  Scheme_Object *cdr;
-  int num_chars;
-
-  str[index++] = '(';
-  index = print (str, index, SCHEME_CAR (pair), escaped);
-  cdr = SCHEME_CDR (pair);
-  while ((cdr != scheme_null) && (SCHEME_TYPE(cdr) == scheme_pair_type))
+    Scheme_Object *cdr;
+    
+    str[index++] = '(';
+    index = print (str, index, SCHEME_CAR (pair), escaped);
+    cdr = SCHEME_CDR (pair);
+    while ((cdr != scheme_null) && (SCHEME_TYPE(cdr) == scheme_pair_type))
     {
-      str[index++] = ' ';
-      index = print (str, index, SCHEME_CAR (cdr), escaped);
-      cdr = SCHEME_CDR (cdr);
+        str[index++] = ' ';
+        index = print (str, index, SCHEME_CAR (cdr), escaped);
+        cdr = SCHEME_CDR (cdr);
     }
-  if (cdr != scheme_null)
+    if (cdr != scheme_null)
     {
-      str[index++] = ' ';
-      str[index++] = '.';
-      str[index++] = ' ';
-      index = print (str, index, cdr, escaped);
+        str[index++] = ' ';
+        str[index++] = '.';
+        str[index++] = ' ';
+        index = print (str, index, cdr, escaped);
     }
-  str[index++] = ')';
-  return (index);
+    str[index++] = ')';
+    return (index);
 }
 
 static int
@@ -232,7 +231,7 @@ static int
 print_char (char *str, int index, Scheme_Object *charobj, int escaped)
 {
   char ch;
-  int num_chars;
+
 
   ch = SCHEME_CHAR_VAL (charobj);
   if (escaped)

@@ -363,20 +363,19 @@ append (Scheme_Object *lst1, Scheme_Object *lst2)
     }
 }
 
-static Scheme_Object *
-reverse_prim (int argc, Scheme_Object *argv[])
+static Scheme_Object *reverse_prim (int argc, Scheme_Object *argv[])
 {
-  Scheme_Object *lst, *cur, *last;
-
-  SCHEME_ASSERT ((argc == 1), "reverse: wrong number of args");
-  last = scheme_null;
-  lst = argv[0];
-  while ( ! SCHEME_NULLP (lst))
+    Scheme_Object *lst, *last;
+    
+    SCHEME_ASSERT ((argc == 1), "reverse: wrong number of args");
+    last = scheme_null;
+    lst = argv[0];
+    while ( ! SCHEME_NULLP (lst))
     {
-      last = scheme_make_pair (SCHEME_CAR (lst), last);
-      lst = SCHEME_CDR (lst);
+        last = scheme_make_pair (SCHEME_CAR (lst), last);
+        lst = SCHEME_CDR (lst);
     }
-  return (last);
+    return (last);
 }
 
 static Scheme_Object *

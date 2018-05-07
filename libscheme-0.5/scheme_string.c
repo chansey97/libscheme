@@ -24,6 +24,9 @@
 
 #include "scheme.h"
 #include <string.h>
+#include <limits.h>
+#include <assert.h>
+#include <ctype.h>
 
 /* globals */
 Scheme_Object *scheme_string_type;
@@ -53,6 +56,18 @@ static Scheme_Object *string_copy (int argc, Scheme_Object *argv[]);
 static Scheme_Object *string_fill (int argc, Scheme_Object *argv[]);
 
 static int strcmp_ci (char *str1, char *str2);
+
+/**
+ * The `strlen` function returns a `size_t`.
+ * The original code expects an `int`.
+ * Use this function to supress warnings and simplify things.
+ */
+int scheme_strlen(const char* s)
+{
+    size_t len = strlen(s);
+    assert(len <= INT_MAX);
+    return (int)len;
+}
 
 void
 scheme_init_string (Scheme_Env *env)
@@ -158,12 +173,11 @@ string (int argc, Scheme_Object *argv[])
   return (str);
 }
 
-static Scheme_Object *
-string_length (int argc, Scheme_Object *argv[])
+static Scheme_Object * string_length (int argc, Scheme_Object *argv[])
 {
-  SCHEME_ASSERT ((argc == 1), "string-length: wrong number of args");
-  SCHEME_ASSERT (SCHEME_STRINGP (argv[0]), "string-length: arg must be a string");
-  return (scheme_make_integer (strlen (SCHEME_STR_VAL (argv[0]))));
+    SCHEME_ASSERT ((argc == 1), "string-length: wrong number of args");
+    SCHEME_ASSERT (SCHEME_STRINGP (argv[0]), "string-length: arg must be a string");
+    return (scheme_make_integer (scheme_strlen (SCHEME_STR_VAL (argv[0]))));
 }
 
 static Scheme_Object *
@@ -176,7 +190,7 @@ string_ref (int argc, Scheme_Object *argv[])
   SCHEME_ASSERT (SCHEME_STRINGP(argv[0]), "string-ref: first arg must be a string");
   SCHEME_ASSERT (SCHEME_INTP(argv[1]), "string-ref: second arg must be an integer");
   str = SCHEME_STR_VAL(argv[0]);
-  len = strlen (str);
+  len =scheme_strlen (str);
   i = SCHEME_INT_VAL(argv[1]);
   if ((i < 0) || (i >= len))
     {
@@ -196,7 +210,7 @@ string_set (int argc, Scheme_Object *argv[])
   SCHEME_ASSERT (SCHEME_INTP(argv[1]), "string-set!: second arg must be an integer");
   SCHEME_ASSERT (SCHEME_CHARP(argv[2]), "string-set!: third arg must be a character");
   str = SCHEME_STR_VAL(argv[0]);
-  len = strlen (str);
+  len =scheme_strlen (str);
   i = SCHEME_INT_VAL(argv[1]);
   if ((i < 0) || (i >= len))
     {
@@ -242,7 +256,7 @@ substring (int argc, Scheme_Object *argv[])
   SCHEME_ASSERT (SCHEME_INTP(argv[1]) && SCHEME_INTP(argv[2]),
 		 "substring: second and third args must be integers");
   chars = SCHEME_STR_VAL (argv[0]);
-  len = strlen (chars);
+  len =scheme_strlen (chars);
   start = SCHEME_INT_VAL (argv[1]);
   finish = SCHEME_INT_VAL (argv[2]);
   SCHEME_ASSERT ((start >= 0 && start <= len), "substring: first index out of bounds");
@@ -282,8 +296,8 @@ append_2 (Scheme_Object *str1, Scheme_Object *str2)
 		 "string-append: arguments must be strings");
   chars1 = SCHEME_STR_VAL (str1);
   chars2 = SCHEME_STR_VAL (str2);
-  len1 = strlen (chars1);
-  len2 = strlen (chars2);
+  len1 =scheme_strlen (chars1);
+  len2 =scheme_strlen (chars2);
   new = scheme_alloc_string (len1+len2, 0);
   for ( i=0 ; i<len1 ; ++i )
     {
@@ -308,7 +322,7 @@ string_to_list (int argc, Scheme_Object *argv[])
   SCHEME_ASSERT (argc == 1, "string->list: wrong number of args");
   SCHEME_ASSERT (SCHEME_STRINGP(argv[0]), "string->list: arg must be a string");
   chars = SCHEME_STR_VAL(argv[0]);
-  len = strlen (chars);
+  len =scheme_strlen (chars);
   first = last = scheme_null;
   for ( i=0 ; i<len ; ++i )
     {
@@ -371,7 +385,7 @@ string_fill (int argc, Scheme_Object *argv[])
   SCHEME_ASSERT (SCHEME_CHARP (argv[1]), "string-fill!: second arg must be a character");
   chars = SCHEME_STR_VAL (argv[0]);
   ch = SCHEME_CHAR_VAL (argv[1]);
-  len = strlen (chars);
+  len =scheme_strlen (chars);
   for ( i=0 ; i<len ; ++i )
     {
       chars[i] = ch;
@@ -379,36 +393,39 @@ string_fill (int argc, Scheme_Object *argv[])
   return (argv[0]);
 }
 
-static int
-strcmp_ci (char *str1, char *str2)
+/**
+ * Compares two case-insensitive strings.
+ */
+static int strcmp_ci (char *str1, char *str2)
 {
-  while (*str1 && *str2)
+    while (*str1 && *str2)
     {
-      if (toupper(*str1) == toupper(*str2))
-	{
-	  *str1++;
-	  *str2++;
-	  continue;
-	}
-      else if (toupper(*str1) < toupper(*str2))
-	{
-	  return -1;
-	}
-      else
-	{
-	  return 1;
-	}
+        if (toupper(*str1) == toupper(*str2))
+        {
+            /* idz -- both of these were *...++ */
+            str1++;
+            str2++;
+            continue;
+        }
+        else if (toupper(*str1) < toupper(*str2))
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
     }
-  if (*str1)
+    if (*str1)
     {
-      return 1;
+        return 1;
     }
-  else if (*str2)
+    else if (*str2)
     {
-      return -1;
+        return -1;
     }
-  else
+    else
     {
-      return 0;
+        return 0;
     }
 }

@@ -23,6 +23,7 @@
 */
 
 #include "scheme.h"
+#include "scheme_internal.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -237,7 +238,7 @@ file_char_ready (Scheme_Input_Port *port)
 {
   FILE *fp = (FILE *) port->port_data;
 #ifdef __APPLE__
-#warning idz -- dodgey edit in file_char_ready
+//#warning idz -- dodgey edit in file_char_ready
     return (fp->_r);
 #elif HAS_STANDARD_IOB
   return (fp->_cnt);
@@ -256,11 +257,9 @@ file_close_input (Scheme_Input_Port *port)
   fclose (fp);
 }
 
-Scheme_Object *
-scheme_make_file_input_port (FILE *fp)
+Scheme_Object *scheme_make_file_input_port (FILE *fp)
 {
   Scheme_Object *port;
-  Scheme_Input_Port *ip;
 
   port = scheme_alloc_object ();
   SCHEME_TYPE (port) = scheme_input_port_type;
@@ -326,7 +325,7 @@ scheme_make_indexed_string (char *str)
 
   is = (Scheme_Indexed_String *) scheme_malloc (sizeof (Scheme_Indexed_String));
   is->string = scheme_strdup (str);
-  is->size = strlen (str);
+  is->size = scheme_strlen (str);
   is->index = 0;
   return (is);
 }
@@ -770,30 +769,30 @@ write_char (int argc, Scheme_Object *argv[])
 static Scheme_Object *
 load (int argc, Scheme_Object *argv[])
 {
-  Scheme_Object *obj, *ret, *port;
-  char *filename;
-  FILE *fp;
-
-  SCHEME_ASSERT ((argc == 1), "load: wrong number of args");
-  SCHEME_ASSERT (SCHEME_STRINGP (argv[0]), "load: arg must be a filename (string)");
-  filename = SCHEME_STR_VAL (argv[0]);
-  printf ("; loading %s\n", filename);
-  fp = fopen (filename, "r");
-  if (! fp)
+    Scheme_Object *obj, *ret = NULL, *port;
+    char *filename;
+    FILE *fp;
+    
+    SCHEME_ASSERT ((argc == 1), "load: wrong number of args");
+    SCHEME_ASSERT (SCHEME_STRINGP (argv[0]), "load: arg must be a filename (string)");
+    filename = SCHEME_STR_VAL (argv[0]);
+    printf ("; loading %s\n", filename);
+    fp = fopen (filename, "r");
+    if (! fp)
     {
-      scheme_signal_error ("load: could not open file for input: %s", filename);
+        scheme_signal_error ("load: could not open file for input: %s", filename);
     }
-  /* skip `#!' to end of line if possible */
-  fscanf (fp, "#!%*s\n");
-  /* now read all expressions */
-  port = scheme_make_file_input_port (fp);
-  while ((obj = scheme_read (port)) != scheme_eof)
+    /* skip `#!' to end of line if possible */
+    fscanf (fp, "#!%*s\n");
+    /* now read all expressions */
+    port = scheme_make_file_input_port (fp);
+    while ((obj = scheme_read (port)) != scheme_eof)
     {
-      ret = scheme_eval (obj, scheme_env);
+        ret = scheme_eval (obj, scheme_env);
     }
-  printf ("; done loading %s\n", filename);
-  fclose (fp);
-  return (ret);
+    printf ("; done loading %s\n", filename);
+    fclose (fp);
+    return (ret);
 }
 
 static Scheme_Object *
@@ -808,23 +807,21 @@ flush_output (int argc, Scheme_Object *argv[])
   return (scheme_true);
 }
 
-static Scheme_Object *
-write_to_string (int argc, Scheme_Object *argv[])
-{
-  char *str;
-  
-  SCHEME_ASSERT ((argc == 1), "write-to-string: wrong number of args");
-  str = scheme_write_to_string (argv[0]);
-  return (scheme_make_string (str));
-}
+//static Scheme_Object *write_to_string (int argc, Scheme_Object *argv[])
+//{
+//  char *str;
+//
+//  SCHEME_ASSERT ((argc == 1), "write-to-string: wrong number of args");
+//  str = scheme_write_to_string (argv[0]);
+//  return (scheme_make_string (str));
+//}
 
-static Scheme_Object *
-display_to_string (int argc, Scheme_Object *argv[])
-{
-  char *str;
-  
-  SCHEME_ASSERT ((argc == 1), "display-to-string: wrong number of args");
-  str = scheme_display_to_string (argv[0]);
-  return (scheme_make_string (str));
-}
+//static Scheme_Object *display_to_string (int argc, Scheme_Object *argv[])
+//{
+//    char *str;
+//    
+//    SCHEME_ASSERT ((argc == 1), "display-to-string: wrong number of args");
+//    str = scheme_display_to_string (argv[0]);
+//    return (scheme_make_string (str));
+//}
 

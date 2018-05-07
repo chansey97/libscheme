@@ -15,4 +15,6 @@ void scheme_init_char(Scheme_Env* env);
 void scheme_init_symbol(Scheme_Env* env);
 void scheme_init_bool(Scheme_Env* env);
 
+int scheme_strlen(const char* s);
+
 #endif /* scheme_internal_h */

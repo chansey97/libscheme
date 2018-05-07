@@ -24,8 +24,10 @@
 
 #include "scheme.h"
 #include "scheme_nummacs.h"
+#include "scheme_internal.h"
 #include <math.h>
 #include <string.h>
+#include <assert.h>
 
 /* globals */
 Scheme_Object *scheme_integer_type, *scheme_double_type;
@@ -133,16 +135,17 @@ scheme_init_number (Scheme_Env *env)
   scheme_add_global ("string->number", scheme_make_prim (string_to_number), env);
 }
 
-
-Scheme_Object *
-scheme_make_integer (int i)
+/**
+ * Creates a scheme integer object
+ */
+Scheme_Object *scheme_make_integer (scheme_integer i)
 {
-  Scheme_Object *si;
-
-  si = scheme_alloc_object ();
-  SCHEME_TYPE (si) = scheme_integer_type;
-  SCHEME_INT_VAL (si) = i;
-  return (si);
+    Scheme_Object *si;
+    
+    si = scheme_alloc_object ();
+    SCHEME_TYPE (si) = scheme_integer_type;
+    SCHEME_INT_VAL (si) = i;
+    return (si);
 }
 
 Scheme_Object *
@@ -841,58 +844,61 @@ double_to_string (double d)
 static Scheme_Object *
 string_to_number (int argc, Scheme_Object *argv[])
 {
-  int base, val, len, is_float, i;
-  char *ptr, *str;
-  double d;
-
-  SCHEME_ASSERT ((argc == 1 || argc == 2), "string->number: wrong number of args");
-  SCHEME_ASSERT (SCHEME_STRINGP(argv[0]), "string->number: first arg must be a string");
-  if (argc == 2)
+    size_t len;
+    int base, is_float, i;
+    char *ptr, *str;
+    double d;
+    
+    SCHEME_ASSERT ((argc == 1 || argc == 2), "string->number: wrong number of args");
+    SCHEME_ASSERT (SCHEME_STRINGP(argv[0]), "string->number: first arg must be a string");
+    if (argc == 2)
     {
-      SCHEME_ASSERT (SCHEME_INTP(argv[1]), "string->number: second arg must be an integer");
-      base = SCHEME_INT_VAL (argv[1]);
+        SCHEME_ASSERT (SCHEME_INTP(argv[1]), "string->number: second arg must be an integer");
+        base = SCHEME_INT_VAL (argv[1]);
     }
-  else
+    else
     {
-      base = 10;
+        base = 10;
     }
-  str = SCHEME_STR_VAL (argv[0]);
-  len = strlen (str);
-  if (! len)
+    str = SCHEME_STR_VAL (argv[0]);
+    len = scheme_strlen (str);
+    if (! len)
     {
-      return (scheme_false);
+        return (scheme_false);
     }
-  is_float = 0;
-  for ( i=0 ; i<len ; ++i )
+    is_float = 0;
+    for ( i=0 ; i<len ; ++i )
     {
-      int ch = str[i];
-      if ((ch == '.') || (ch == 'e') || (ch == 'E'))
-	{
-	  is_float = 1;
-	}
+        int ch = str[i];
+        if ((ch == '.') || (ch == 'e') || (ch == 'E'))
+        {
+            is_float = 1;
+        }
     }
-  if ( is_float )
+    if ( is_float )
     {
-      d = strtod (str, &ptr);
-      if ((ptr - str) < len)
-	{
-	  return (scheme_false);
-	}
-      else
-	{
-	  return (scheme_make_double (d));
-	}
+        d = strtod (str, &ptr);
+        if ((ptr - str) < len)
+        {
+            return (scheme_false);
+        }
+        else
+        {
+            return (scheme_make_double (d));
+        }
     }
-  else
+    else
     {
-      val = strtol (SCHEME_STR_VAL(argv[0]), &ptr, base);
-      if ((ptr - str) < len)
-	{
-	  return (scheme_false);
-	}
-      else
-	{
-	  return (scheme_make_integer (val));
-	}
+        long val = strtol (SCHEME_STR_VAL(argv[0]), &ptr, base);
+        assert(val <= scheme_integer_max);
+        if ((ptr - str) < len)
+        {
+            return (scheme_false);
+        }
+        else
+        {
+            // cast is safe based on assert above.
+            return (scheme_make_integer ((scheme_integer)val));
+        }
     }
 }

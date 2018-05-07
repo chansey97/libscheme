@@ -34,30 +34,36 @@ scheme_init_eval (Scheme_Env *env)
   scheme_add_global ("eval", scheme_make_prim (eval), env);
 }
 
-Scheme_Object *
-scheme_eval (Scheme_Object *obj, Scheme_Env *env)
+/**
+ * Evaluates a `Scheme_object`.
+ * @note may not return if obj is unbound.
+ * @param obj the object to be evaluated
+ * @param env the environment in which to evaluate the object
+ * @return the result of the evalutaion.
+ */
+Scheme_Object *scheme_eval (Scheme_Object *obj, Scheme_Env *env)
 {
-  Scheme_Object *type;
-
-  type = SCHEME_TYPE (obj);
-  if (type == scheme_symbol_type)
+    Scheme_Object *type;
+    
+    type = SCHEME_TYPE (obj);
+    if (type == scheme_symbol_type)
     {
-      Scheme_Object *val;
-
-      val = scheme_lookup_value (obj, env);
-      if (! val)
-	{
-	  scheme_signal_error ("reference to unbound symbol: %s", SCHEME_STR_VAL(obj));
-	}
-      return (val);
+        Scheme_Object *val;
+        
+        val = scheme_lookup_value (obj, env);
+        if (! val)
+        {
+            scheme_signal_error ("reference to unbound symbol: %s", SCHEME_STR_VAL(obj));
+        }
+        return (val);
     }
-  else if (type == scheme_pair_type)
+    else if (type == scheme_pair_type)
     {
-      return (scheme_eval_combination (obj, env));
+        return (scheme_eval_combination (obj, env));
     }
-  else
+    else
     {
-      return (obj);
+        return (obj);
     }
 }
 
@@ -68,7 +74,7 @@ scheme_eval_combination (Scheme_Object *comb, Scheme_Env *env)
 {
   Scheme_Object *rator, *type, *rands;
   Scheme_Object *evaled_rands[SCHEME_MAX_ARGS];
-  Scheme_Object *rand, *fun, *form;
+  Scheme_Object  *fun, *form;
   int num_rands, i;
 
   rator = scheme_eval (SCHEME_CAR (comb), env);
